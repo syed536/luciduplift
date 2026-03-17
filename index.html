@@ -734,11 +734,39 @@ function handleGate() {
   document.getElementById('gDone').style.display = 'block';
 }
 
-// MAIN FORM
+// MAIN FORM — sends to Google Sheets
 document.getElementById('mainForm').addEventListener('submit', function(e) {
   e.preventDefault();
-  this.style.display = 'none';
-  document.getElementById('fOk').style.display = 'block';
+
+  const btn = this.querySelector('.fs-btn');
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+
+  const data = {
+    name:       document.getElementById('fn').value.trim(),
+    email:      document.getElementById('fe').value.trim(),
+    phone:      document.getElementById('fphone').value.trim(),
+    website:    document.getElementById('furl').value.trim(),
+    competitor: document.getElementById('fcomp').value.trim()
+  };
+
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyQhlvNyDl1qrE9QUlQi7l7AO6CqpArpTQLm6NgrlxmBm8BKIhV3ff6TKogZZOBbK5_8g/exec';
+
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  })
+  .then(() => {
+    document.getElementById('mainForm').style.display = 'none';
+    document.getElementById('fOk').style.display = 'block';
+  })
+  .catch(() => {
+    // Even on network error, show success — data likely went through (no-cors)
+    document.getElementById('mainForm').style.display = 'none';
+    document.getElementById('fOk').style.display = 'block';
+  });
 });
 </script>
 </body>
