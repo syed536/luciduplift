@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LucidUplift - Free Website Scorecard for Service Businesses</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Montserrat:wght@700;800;900&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --black: #111111; --body: #333333; --mid: #555555; --soft: #888888;
+  --white: #ffffff; --grey: #f5f5f5; --border: #e0e0e0;
+  --blue: #1d6fe8; --blue-dark: #1558c8; --blue-light: #e8f0fd;
+  --yellow: #fff176; --yellow-border: #e8d900;
+  --score-green: #16a34a; --score-amber: #d97706; --score-red: #dc2626;
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'Lato', sans-serif; background: var(--white); color: var(--body); font-size: 18px; line-height: 1.75; -webkit-font-smoothing: antialiased; }
+
+/* NAV */
+nav { display: flex; justify-content: space-between; align-items: center; padding: 1.1rem 112px; border-bottom: 1px solid var(--border); background: var(--white); position: sticky; top: 0; z-index: 200; box-shadow: 0 1px 12px rgba(15,14,12,0.06); }
+nav img { height: 36px; display: block; }
+.nav-cta { display: inline-block; background: var(--blue); color: var(--white); font-family: 'Lato', sans-serif; font-size: 1.2rem; font-weight: 700; padding: 1.1rem 2.75rem; border-radius: 5px; text-decoration: none; transition: background 0.18s; white-space: nowrap; cursor: pointer; border: none; letter-spacing: 0.01em; }
+.nav-cta:hover { background: var(--blue-dark); color: var(--white); }
+
+/* HERO */
+.hero-outer { width: 100%; padding: 0 112px; }
+.hero { 
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 4rem 0;
+  display: grid; 
+  grid-template-columns: 1fr 1fr; 
+  gap: 4rem; 
+  align-items: center;
+}
+.hero-left { text-align: left; }
+.hero-right { display: flex; justify-content: center; }
+.open-tag { display: inline-block; font-family: 'Caveat', cursive; font-size: 1.55rem; font-weight: 700; color: #1a1200; background: linear-gradient(104deg, transparent 0%, transparent 1.5%, rgba(255,238,50,0.6) 1.5%, rgba(255,241,118,0.85) 4%, rgba(255,241,118,0.9) 8%, rgba(255,241,118,0.85) 92%, rgba(255,238,50,0.6) 96%, transparent 98%, transparent 100%); padding: 0.15rem 0.5rem; margin-bottom: 1.25rem; border: none; border-radius: 0; letter-spacing: 0.02em; line-height: 1.65; transform: rotate(-0.4deg); }
+.hero h1 { font-family: 'Montserrat', sans-serif; font-size: clamp(1.8rem, 3.2vw, 2.6rem); line-height: 1.18; font-weight: 900; color: var(--black); margin-bottom: 1.1rem; letter-spacing: -0.02em; }
+.hero h1 span { color: var(--blue); }
+.hero-sub { font-size: 1.05rem; color: var(--mid); margin-bottom: 1.75rem; line-height: 1.72; }
+.hero-trust { display: flex; align-items: center; gap: 0.85rem; margin-bottom: 1.75rem; flex-wrap: wrap; }
+.hero-stars { display: flex; align-items: center; gap: 0.2rem; }
+.hero-stars svg { width: 18px; height: 18px; fill: #f59e0b; }
+.hero-trust-text { font-size: 0.88rem; color: var(--mid); }
+.hero-trust-link { font-size: 0.88rem; color: var(--blue); font-weight: 700; text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.18s; }
+.hero-trust-link:hover { border-color: var(--blue); }
+
+/* CTA */
+.cta-wrap { display: flex; flex-direction: column; align-items: flex-start; gap: 0.5rem; margin: 1.5rem 0; }
+.cta-btn { display: inline-block; background: var(--blue); color: var(--white); font-family: 'Lato', sans-serif; font-size: 1.2rem; font-weight: 700; padding: 1.1rem 2.75rem; border-radius: 5px; border: none; cursor: pointer; transition: background 0.18s; text-decoration: none; text-align: center; letter-spacing: 0.01em; }
+.cta-btn:hover { background: var(--blue-dark); color: var(--white); }
+.cta-btn-sub { font-size: 0.78rem; opacity: 0.72; display: block; margin-top: 0.3rem; font-weight: 400; letter-spacing: 0; }
+.cta-note { font-size: 0.8rem; color: var(--soft); text-align: center; }
+
+/* DONUT SCORECARD */
+.scorecard-visual { max-width: 600px; margin: 0 auto 2rem; background: var(--white); border: 1px solid var(--border); border-radius: 6px; padding: 2rem 1.5rem 1.5rem; text-align: center; }
+.sc-visual-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--soft); font-weight: 600; margin-bottom: 0.35rem; }
+.sc-visual-title { font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 700; color: var(--black); margin-bottom: 1.5rem; }
+.donut-wrap { position: relative; width: 320px; height: 320px; margin: 0 auto 1.25rem; }
+.donut-wrap canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.donut-centre { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none; }
+.donut-score { font-family: 'Montserrat', sans-serif; font-size: 2rem; font-weight: 900; color: #f5c518; line-height: 1; display: block; }
+.donut-label { font-size: 0.7rem; color: var(--mid); font-weight: 600; display: block; margin-top: 0.25rem; }
+.sc-legend { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+.sc-legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.82rem; color: var(--mid); }
+.sc-legend-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+.dot-red { background: #f87171; } .dot-amber { background: #fbbf24; } .dot-green { background: #34d399; }
+.sc-foot { background: var(--grey); border-radius: 4px; padding: 0.6rem 1rem; font-size: 0.78rem; color: var(--soft); text-align: center; margin-top: 0.5rem; }
+
+/* GREY BAND */
+.grey-band { background: var(--grey); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 1.5rem 112px; text-align: center; }
+.gb-label { font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--soft); margin-bottom: 0.85rem; }
+.logos-row { display: flex; justify-content: center; align-items: center; gap: 2.5rem; flex-wrap: wrap; }
+.logo-item { font-size: 0.95rem; font-weight: 600; color: var(--blue); letter-spacing: 0.02em; }
+
+/* SECTIONS */
+.sec { padding: 4rem 112px; }
+.sec-inner { max-width: 1440px; margin: 0 auto; }
+.sec-inner-narrow { max-width: 860px; margin: 0 auto; }
+.sec-label { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--soft); margin-bottom: 0.85rem; }
+h2 { font-family: 'Montserrat', sans-serif; font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 900; color: var(--black); line-height: 1.24; letter-spacing: -0.01em; margin-bottom: 0.85rem; }
+.sec-lead { font-size: 1.05rem; color: var(--mid); line-height: 1.72; max-width: 540px; }
+mark { background: rgba(255,241,118,0.85); padding: 0.05rem 0.3rem; border-radius: 2px; white-space: nowrap; }
+
+/* CATEGORY CARDS */
+.cats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2.5rem; }
+.cat-card { border: 1px solid var(--border); border-radius: 4px; padding: 1.35rem 1.4rem; background: var(--white); }
+.cat-card-num { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--blue); margin-bottom: 0.4rem; }
+.cat-card h3 { font-family: 'Montserrat', sans-serif; font-size: 0.97rem; font-weight: 700; color: var(--black); margin-bottom: 0.4rem; line-height: 1.3; }
+.cat-card p { font-size: 0.88rem; color: var(--mid); line-height: 1.6; }
+.cat-bar-preview { display: flex; align-items: center; gap: 0.6rem; margin-top: 1.25rem; }
+.cbp-track { flex: 1; height: 4px; background: var(--grey); border-radius: 3px; overflow: hidden; }
+.cbp-fill { height: 100%; border-radius: 3px; background: var(--blue); }
+.cbp-label { font-size: 0.82rem; font-weight: 700; min-width: 28px; text-align: right; color: var(--body); }
+
+/* HOW IT WORKS */
+.how-bg { background: #0d0d0d; color: var(--white); }
+.how-bg .sec-label { color: rgba(255,255,255,0.4); }
+.how-bg h2 { color: var(--white); }
+.how-bg .sec-lead { color: rgba(255,255,255,0.6); }
+.steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2.5rem; }
+.step-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 6px; padding: 1.75rem 1.5rem; position: relative; overflow: hidden; }
+.step-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 60%); pointer-events: none; }
+.step-num { font-family: 'Montserrat', sans-serif; font-size: 5rem; font-weight: 900; color: rgba(255,255,255,0.05); position: absolute; top: 0.5rem; right: 0.85rem; line-height: 1; letter-spacing: -0.03em; }
+.step-tag { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: #fbbf24; margin-bottom: 0.85rem; display: block; }
+.step-card h3 { font-family: 'Montserrat', sans-serif; font-size: 1.05rem; font-weight: 700; color: rgba(255,255,255,0.95); margin-bottom: 0.75rem; line-height: 1.3; }
+.step-card p { font-size: 0.92rem; color: rgba(255,255,255,0.7); line-height: 1.72; }
+
+/* PROOF */
+.proof-box { background: var(--grey); border-left: 4px solid var(--blue); padding: 1.4rem 1.5rem; margin: 1.75rem 0; border-radius: 0 4px 4px 0; }
+.pb-quote { font-family: 'Montserrat', sans-serif; font-size: 1.15rem; font-weight: 700; color: var(--black); margin-bottom: 0.25rem; line-height: 1.35; }
+.pb-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.09em; color: var(--blue); font-weight: 600; margin-bottom: 0.85rem; display: block; }
+.proof-box p { font-size: 1rem; color: var(--mid); line-height: 1.75; }
+
+/* RESULTS */
+.results-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin: 2rem 0; }
+.rc { background: var(--grey); border: 1px solid var(--border); border-radius: 4px; padding: 1.75rem 1.5rem; text-align: center; }
+.rc-niche { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--blue); margin-bottom: 0.6rem; }
+.rc-stat { font-family: 'Montserrat', sans-serif; font-size: 2.1rem; font-weight: 900; color: var(--black); line-height: 1; margin-bottom: 0.5rem; }
+.rc-desc { font-size: 0.82rem; color: var(--mid); line-height: 1.55; }
+
+/* SAMPLE */
+.sample-bg { background: var(--grey); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.sample-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: stretch; margin-top: 2rem; }
+.sample-img-placeholder { width: 100%; aspect-ratio: 3/4; background: var(--white); border: 2px dashed var(--border); border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.75rem; color: var(--soft); font-size: 0.88rem; text-align: center; padding: 2rem; }
+.sample-img-placeholder svg { width: 40px; height: 40px; opacity: 0.3; }
+.sample-form-col { display: flex; flex-direction: column; justify-content: space-between; }
+.sample-form-col h3 { font-family: 'Montserrat', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--black); margin-bottom: 0.5rem; line-height: 1.3; }
+.sample-form-col > p { font-size: 0.95rem; color: var(--mid); margin-bottom: 32px; line-height: 1.65; }
+.toc-list { list-style: none; padding: 0; margin-bottom: 32px; }
+.toc-list li { display: flex; align-items: center; gap: 0.65rem; font-size: 0.9rem; color: var(--body); padding: 0.4rem 0; border-bottom: 1px solid var(--border); line-height: 1.5; }
+.toc-list li:last-child { border-bottom: none; }
+.toc-num { font-size: 0.7rem; font-weight: 700; color: var(--blue); min-width: 22px; }
+.gate-form-box { background: var(--white); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem; }
+.gate-form-box h4 { font-family: 'Montserrat', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--black); margin-bottom: 0.35rem; }
+.gate-form-box p { font-size: 0.88rem; color: var(--mid); margin-bottom: 1rem; line-height: 1.55; }
+.gi { width: 100%; padding: 0.65rem 0.9rem; background: var(--grey); border: 1px solid var(--border); border-radius: 3px; font-family: 'Lato', sans-serif; font-size: 1rem; color: var(--black); outline: none; transition: border-color 0.18s; margin-bottom: 0.5rem; display: block; }
+.gi:focus { border-color: var(--blue); }
+.gb { width: 100%; padding: 0.85rem; background: var(--blue); color: var(--white); border: none; border-radius: 3px; font-family: 'Lato', sans-serif; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.18s; }
+.gb:hover { background: var(--blue-dark); }
+.g-note { font-size: 0.75rem; color: var(--soft); margin-top: 0.5rem; text-align: center; }
+.gf-success { display: none; text-align: center; padding: 1rem 0; }
+.gf-success h4 { font-family: 'Montserrat', sans-serif; font-size: 1.05rem; font-weight: 700; margin-bottom: 0.3rem; color: var(--black); }
+.gf-success p { font-size: 0.9rem; color: var(--mid); }
+
+/* WHO */
+.who-band-inner p { font-size: 1.05rem; color: var(--body); line-height: 1.82; margin-bottom: 1.25rem; }
+.who-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 2rem 0; }
+.ws { background: var(--white); border: 1px solid var(--border); border-radius: 4px; padding: 1.25rem; text-align: center; }
+.ws-num { font-family: 'Montserrat', sans-serif; font-size: 2rem; font-weight: 900; color: var(--blue); line-height: 1; margin-bottom: 0.3rem; }
+.ws-lbl { font-size: 0.85rem; color: var(--mid); line-height: 1.5; }
+.specialism-row { display: flex; gap: 1rem; flex-wrap: wrap; margin: 1.75rem 0; }
+.spec-badge { background: var(--blue-light); border: 1px solid rgba(29,111,232,0.18); border-left: 3px solid var(--blue); border-radius: 4px; padding: 1.25rem 1.35rem; flex: 1; min-width: 160px; }
+.spec-badge strong { display: block; font-weight: 700; color: var(--black); font-size: 1rem; margin-bottom: 0.4rem; font-family: 'Montserrat', sans-serif; line-height: 1.3; }
+.spec-badge span { font-size: 0.92rem; color: var(--mid); line-height: 1.45; display: block; }
+.auth-box { background: var(--white); border: 1px solid var(--border); border-radius: 4px; padding: 1.75rem; margin: 1.75rem 0; }
+.auth-box h3 { font-family: 'Montserrat', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--black); margin-bottom: 1rem; }
+.auth-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.65rem; }
+.auth-list li { display: flex; align-items: flex-start; gap: 0.65rem; font-size: 1rem; color: var(--body); line-height: 1.7; }
+.auth-list li::before { content: '✓'; color: var(--blue); font-weight: 700; flex-shrink: 0; }
+
+/* TESTIMONIALS */
+.testi-sec { padding: 4.5rem 112px; background: var(--grey); border-top: 1px solid var(--border); }
+.testi-inner { max-width: 1440px; margin: 0 auto; }
+.testi-inner h2 { font-family: 'Montserrat', sans-serif; font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 900; color: var(--black); margin-bottom: 0.5rem; letter-spacing: -0.01em; text-align: center; }
+.testi-inner .testi-sub { text-align: center; color: var(--mid); font-size: 1rem; margin-bottom: 2.5rem; }
+.testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+.testi-card { background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 1.75rem; display: flex; flex-direction: column; gap: 1rem; }
+.testi-qs { font-family: 'Montserrat', sans-serif; font-size: 2.5rem; font-weight: 900; color: rgba(15,14,12,0.12); line-height: 1; margin-bottom: -0.5rem; }
+.testi-stars { display: flex; gap: 0.2rem; }
+.testi-stars svg { width: 18px; height: 18px; fill: #f59e0b; }
+.testi-quote { font-size: 0.97rem; color: var(--body); line-height: 1.7; flex: 1; }
+.testi-quote strong { color: var(--black); font-weight: 700; }
+.testi-author { padding-top: 1rem; border-top: 1px solid var(--border); }
+.testi-avatar { display: none; }
+.testi-name { font-family: 'Montserrat', sans-serif; font-size: 0.92rem; font-weight: 700; color: var(--black); }
+.testi-role { font-size: 0.82rem; color: var(--soft); margin-top: 0.1rem; }
+
+/* URGENCY */
+.urgency { background: #111111; color: var(--white); text-align: center; padding: 2.5rem 112px; }
+.urgency-heading { font-family: 'Montserrat', sans-serif; font-size: clamp(1.3rem, 3vw, 1.75rem); font-weight: 900; color: var(--white); line-height: 1.28; letter-spacing: -0.01em; margin-bottom: 0.85rem; }
+.urgency-sub { font-size: 1rem; color: rgba(255,255,255,0.5); margin-bottom: 1.5rem; line-height: 1.65; max-width: 520px; margin-left: auto; margin-right: auto; }
+.spots-row { display: flex; justify-content: center; gap: 2.5rem; flex-wrap: wrap; }
+.spot-item { text-align: center; }
+.spot-num { font-family: 'Montserrat', sans-serif; font-size: 2.2rem; font-weight: 900; color: #f5c518; line-height: 1; display: block; margin-bottom: 0.2rem; }
+.spot-lbl { font-size: 0.78rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* FINAL FORM */
+.final { max-width: 620px; margin: 0 auto; padding: 4rem 1.5rem; text-align: center; }
+.final h2 { font-family: 'Montserrat', sans-serif; font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 900; color: var(--black); line-height: 1.15; margin-bottom: 0.75rem; letter-spacing: -0.02em; white-space: nowrap; }
+.final .fsub { font-size: 1.05rem; color: var(--mid); margin-bottom: 2rem; line-height: 1.75; }
+.ff { text-align: left; }
+.fg { margin-bottom: 1rem; }
+.fl { display: block; font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--mid); margin-bottom: 0.38rem; }
+.fl .opt { font-size: 0.72rem; font-weight: 400; text-transform: none; color: var(--soft); margin-left: 0.35rem; letter-spacing: 0; }
+.fi { width: 100%; padding: 0.88rem 1rem; background: var(--grey); border: 1px solid var(--border); border-radius: 3px; font-family: 'Lato', sans-serif; font-size: 1rem; color: var(--black); outline: none; transition: border-color 0.18s; }
+.fi:focus { border-color: var(--blue); background: var(--white); }
+.fs-btn { width: 100%; padding: 1.1rem; background: var(--blue); color: var(--white); border: none; border-radius: 5px; font-family: 'Lato', sans-serif; font-size: 1.2rem; font-weight: 700; cursor: pointer; margin-top: 0.5rem; transition: background 0.18s; }
+.fs-btn:hover { background: var(--blue-dark); }
+.fs-btn-sub { font-size: 0.78rem; opacity: 0.72; display: block; margin-top: 0.3rem; font-weight: 400; }
+
+/* SUCCESS STATE */
+.f-ok {
+  display: none;
+  text-align: center;
+  padding: 2.5rem 2rem;
+  border-radius: 8px;
+  background: var(--white);
+  border: 1px solid rgba(29,111,232,0.2);
+  position: relative;
+  overflow: hidden;
+}
+.f-ok::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--blue), #34d399, #fbbf24, var(--blue));
+  background-size: 200% 100%;
+  animation: shimmer 2s linear infinite;
+}
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+.f-ok-icon {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: var(--blue-light);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 1.25rem;
+  animation: popIn 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+@keyframes popIn { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+.f-ok-icon svg { width: 36px; height: 36px; }
+.f-ok h3 { font-family: 'Montserrat', sans-serif; font-size: 1.5rem; font-weight: 900; margin-bottom: 0.5rem; color: var(--black); }
+.f-ok .f-ok-sub { font-size: 1rem; color: var(--mid); margin-bottom: 2rem; line-height: 1.65; }
+.f-ok-steps { display: flex; justify-content: center; max-width: 440px; margin: 0 auto; }
+.f-ok-step { flex: 1; text-align: center; position: relative; }
+.f-ok-step:not(:last-child)::after { content: ''; position: absolute; top: 15px; left: 60%; width: 80%; height: 2px; background: var(--border); z-index: 0; }
+.f-ok-step-dot { width: 30px; height: 30px; border-radius: 50%; background: var(--blue); color: var(--white); font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; position: relative; z-index: 1; }
+.f-ok-step-label { font-size: 0.75rem; color: var(--mid); line-height: 1.4; padding: 0 0.25rem; }
+
+footer { text-align: center; padding: 1.75rem 112px; font-size: 0.82rem; color: var(--soft); border-top: 1px solid var(--border); line-height: 1.9; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1100px) {
+  nav, .hero-outer, .testi-sec, .grey-band, .sec, .urgency, footer { padding-left: 2rem; padding-right: 2rem; }
+}
+@media (max-width: 800px) {
+  .hero { grid-template-columns: 1fr; gap: 2rem; padding: 2.5rem 0 2rem; }
+  .hero-left { text-align: center; }
+  .hero-right { display: flex; }
+  .hero-trust { justify-content: center; }
+  .cta-wrap { align-items: center !important; }
+  .nav-cta { font-size: 0.9rem; padding: 0.7rem 1.25rem; }
+  .testi-grid { grid-template-columns: 1fr 1fr; }
+  .steps-grid, .cats-grid, .results-row, .who-stats { grid-template-columns: 1fr; }
+  .specialism-row { flex-direction: column; }
+  .sample-cols { grid-template-columns: 1fr; }
+  .sample-form-col { position: static; }
+  .donut-wrap { width: 260px; height: 260px; }
+}
+@media (max-width: 560px) {
+  nav, .hero-outer, .testi-sec, .grey-band, .sec, .urgency, footer { padding-left: 1.25rem; padding-right: 1.25rem; }
+  nav { padding-top: 0.85rem; padding-bottom: 0.85rem; }
+  nav img { height: 28px; }
+  .nav-cta { font-size: 0.8rem; padding: 0.55rem 0.9rem; }
+  .hero { padding: 1.75rem 0 2rem; }
+  .hero h1 { font-size: 1.75rem; }
+  .hero-sub { font-size: 0.97rem; }
+  .cta-btn { width: 100%; text-align: center; padding: 1rem 1.25rem; font-size: 1.05rem; }
+  .cta-wrap { align-items: stretch !important; }
+  .testi-grid, .who-stats { grid-template-columns: 1fr; }
+  .spots-row { flex-direction: column; gap: 1.25rem; align-items: center; }
+  .donut-wrap { width: 220px; height: 220px; }
+  .scorecard-visual { padding: 1.25rem 1rem 1rem; }
+  .final { padding: 2.5rem 1.25rem; }
+  .logos-row { gap: 1rem 1.5rem; }
+  h2 { font-size: 1.4rem !important; }
+  .f-ok-steps { flex-direction: column; gap: 1rem; align-items: center; }
+  .f-ok-step:not(:last-child)::after { display: none; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <img src="data:image/png;base64,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" alt="LucidUplift">
+  <button class="nav-cta" onclick="document.getElementById('apply').scrollIntoView({behavior:'smooth'})">Request Your Free Scorecard</button>
+</nav>
+
+<!-- HERO -->
+<div class="hero-outer">
+<section class="hero">
+  <div class="hero-left">
+    <div class="open-tag">Free for service businesses. Delivered in 48 hours.</div>
+    <h1>Find Out How Your Service Business Website <span>Scores</span></h1>
+    <p class="hero-sub">We analyse thousands of real customer conversations in your niche and audit your site for conversion friction. You get a scored breakdown across 9 areas, with actionable insights backed by real customer data.</p>
+    <div class="hero-trust">
+      <div class="hero-stars">
+        <svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+        <svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+        <svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+        <svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+        <svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+      </div>
+      <span class="hero-trust-text">Rated 5 stars by service businesses</span>
+      <a class="hero-trust-link" href="#testimonials">Read reviews</a>
+    </div>
+    <div class="cta-wrap" style="align-items:flex-start;">
+      <button class="cta-btn" onclick="document.getElementById('apply').scrollIntoView({behavior:'smooth'})">
+        Request My Free Scorecard
+        <span class="cta-btn-sub">100% Free · No card required · No obligation</span>
+      </button>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="scorecard-visual" style="margin:0;max-width:100%;">
+      <div class="sc-visual-label">LucidUplift Website Scorecard</div>
+      <div class="sc-visual-title">Sample Service Business Website Score</div>
+      <div class="donut-wrap">
+        <canvas id="donutChart" width="320" height="320"></canvas>
+        <div class="donut-centre">
+          <span class="donut-score" id="animScore">0</span>
+          <span class="donut-label">Overall Score</span>
+        </div>
+      </div>
+      <div class="sc-legend">
+        <div class="sc-legend-item"><div class="sc-legend-dot dot-red"></div>Needs attention</div>
+        <div class="sc-legend-item"><div class="sc-legend-dot dot-amber"></div>Quite good</div>
+        <div class="sc-legend-item"><div class="sc-legend-dot dot-green"></div>Performing well</div>
+      </div>
+      <div class="sc-foot">Sample scorecard. Your actual scores will reflect your site and your niche.</div>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- LOGOS -->
+<div class="grey-band">
+  <div class="gb-label">Used by service businesses across</div>
+  <div class="logos-row">
+    <span class="logo-item">Healthcare</span>
+    <span class="logo-item">Automotive</span>
+    <span class="logo-item">Home Improvement</span>
+    <span class="logo-item">Roofing</span>
+    <span class="logo-item">Technology</span>
+    <span class="logo-item">Industrial</span>
+  </div>
+</div>
+
+<!-- SCORECARD CATEGORIES -->
+<section class="sec">
+  <div class="sec-inner">
+    <div class="sec-label">The scorecard</div>
+    <h2>Nine Areas. One Score. A Clear Path Forward.</h2>
+    <p class="sec-lead">Your scorecard breaks down your website across nine conversion-critical areas, combining Reddit voice-of-customer research and a full CRO audit. Every score comes with a specific finding and an actionable recommendation.</p>
+    <div class="cats-grid">
+      <div class="cat-card">
+        <div class="cat-card-num">Area 01</div>
+        <h3>Homepage Clarity and Messaging</h3>
+        <p>Does your homepage immediately tell the right visitor they're in the right place? We score your above-the-fold clarity, headline relevance, and messaging hierarchy.</p>
+        <div class="cat-bar-preview"><div class="cbp-track"><div class="cbp-fill" style="width:58%"></div></div><span class="cbp-label">58</span></div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-card-num">Area 02</div>
+        <h3>CTA Effectiveness</h3>
+        <p>Are your calls to action visible, specific, and placed where decisions are made? We score every primary action across your key pages.</p>
+        <div class="cat-bar-preview"><div class="cbp-track"><div class="cbp-fill" style="width:41%"></div></div><span class="cbp-label">41</span></div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-card-num">Area 03</div>
+        <h3>Trust Signals and Social Proof</h3>
+        <p>Service businesses live and die by trust. We score whether your reviews, credentials, and proof points appear where they actually influence decisions.</p>
+        <div class="cat-bar-preview"><div class="cbp-track"><div class="cbp-fill" style="width:63%"></div></div><span class="cbp-label">63</span></div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-card-num">Area 04</div>
+        <h3>Customer Language Match</h3>
+        <p>Backed by Reddit data. We analyse thousands of real conversations in your niche and score how well your copy reflects the words your clients actually use.</p>
+        <div class="cat-bar-preview"><div class="cbp-track"><div class="cbp-fill" style="width:35%"></div></div><span class="cbp-label">35</span></div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-card-num">Area 05</div>
+        <h3>Pricing Transparency</h3>
+        <p>Pricing anxiety is the number one reason service business visitors leave without contacting you. We score how well your site addresses it.</p>
+        <div class="cat-bar-preview"><div class="cbp-track"><div class="cbp-fill" style="width:28%"></div></div><span class="cbp-label">28</span></div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-card-num">Area 06</div>
+        <h3>Contact and Conversion Friction</h3>
+        <p>How hard is it to actually get in touch? We score your forms, contact journey, and every point of unnecessary friction between visitor and enquiry.</p>
+        <div class="cat-bar-preview"><div class="cbp-track"><div class="cbp-fill" style="width:72%"></div></div><span class="cbp-label">72</span></div>
+      </div>
+      <div class="cat-card" style="grid-column: 1 / -1;">
+        <div class="cat-card-num">Area 07</div>
+        <h3>Competitive Positioning</h3>
+        <p>Does your site clearly answer why a visitor should choose you over the competitor they just looked at? We score your differentiation and positioning clarity.</p>
+        <div class="cat-bar-preview"><div class="cbp-track"><div class="cbp-fill" style="width:78%"></div></div><span class="cbp-label">78</span></div>
+      </div>
+      <div class="cat-card" style="background: var(--blue-light); border-color: var(--blue);">
+        <div class="cat-card-num" style="color:var(--blue);">Area 08</div>
+        <h3>Reddit Voice-of-Customer Report</h3>
+        <p>We synthesise thousands of real Reddit comments in your niche to extract what your ideal clients are saying, fearing, and searching for.</p>
+        <div class="cat-bar-preview"><div class="cbp-track"><div class="cbp-fill" style="width:100%"></div></div><span class="cbp-label" style="color:var(--blue);">Included</span></div>
+      </div>
+      <div class="cat-card" style="background: var(--blue-light); border-color: var(--blue);">
+        <div class="cat-card-num" style="color:var(--blue);">Area 09</div>
+        <h3>Full CRO Audit Report</h3>
+        <p>A structured, page-by-page conversion rate optimisation audit of your existing site. Every friction point identified, ranked by impact on your enquiry rate.</p>
+        <div class="cat-bar-preview"><div class="cbp-track"><div class="cbp-fill" style="width:100%"></div></div><span class="cbp-label" style="color:var(--blue);">Included</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="sec how-bg">
+  <div class="sec-inner">
+    <div class="sec-label">How it works</div>
+    <h2>Real Data. Real Insights. Real Direction.</h2>
+    <p class="sec-lead">Two research sources most agencies skip entirely, combined into one scored document with clear next steps.</p>
+    <div class="steps-grid">
+      <div class="step-card">
+        <span class="step-num">01</span>
+        <span class="step-tag">Step 01</span>
+        <h3>Reddit Data Synthesis</h3>
+        <p>We gather thousands of comments from Reddit boards where real people in your niche discuss their frustrations, fears, and what makes them choose a provider. We run a full data synthesis to extract the insights you won't find anywhere else.</p>
+      </div>
+      <div class="step-card">
+        <span class="step-num">02</span>
+        <span class="step-tag">Step 02</span>
+        <h3>CRO Audit of Your Site</h3>
+        <p>We audit your existing website page by page through a conversion lens. Copy, structure, calls to action, trust signals, friction points. Every gap becomes a finding.</p>
+      </div>
+      <div class="step-card">
+        <span class="step-num">03</span>
+        <span class="step-tag">Step 03</span>
+        <h3>Your Scorecard, Delivered</h3>
+        <p>Everything is compiled into your scored report. A total score out of 100, a breakdown across all nine areas, and specific actionable recommendations for each. Delivered to your inbox within 48 hours.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF -->
+<section class="sec">
+  <div class="sec-inner-narrow">
+    <div class="sec-label">Why this works</div>
+    <h2>Your Clients Are Telling You What They Want. Your Site Just Isn't Listening.</h2>
+    <p>Right now, on Reddit and across dozens of online forums, people in your niche are describing exactly what frustrates them about service businesses like yours. What makes them trust one provider over another. What stops them picking up the phone.</p>
+    <div class="proof-box">
+      <div class="pb-quote">"How much does this actually cost?"</div>
+      <span class="pb-label">The number one question found across Reddit threads in service business niches</span>
+      <p>In one recent audit, we analysed 47 Reddit threads from people searching for legal services. Pricing transparency dominated every conversation. That firm's website said nothing about cost. Adding one pricing guidance section became the highest-impact change in the entire project. It took two hours to write. Enquiry numbers improved within three weeks.</p>
+    </div>
+    <p>This is what a score of 28 out of 100 on Pricing Transparency looks like in practice. And this is exactly the kind of finding your scorecard will surface.</p>
+    <h2 style="margin-top: 3.5rem;">What Service Businesses Do With Their Scorecard</h2>
+    <div class="results-row" style="margin-top: 2rem;">
+      <div class="rc"><div class="rc-niche">Legal Services</div><div class="rc-stat">+64%</div><div class="rc-desc">increase in lead form submissions in 6 weeks after acting on scorecard findings</div></div>
+      <div class="rc"><div class="rc-niche">Accountancy</div><div class="rc-stat">+41%</div><div class="rc-desc">more consultation bookings after fixing customer language and CTA scores</div></div>
+      <div class="rc"><div class="rc-niche">Landscaping</div><div class="rc-stat">+88%</div><div class="rc-desc">rise in quote requests in the first month after a scorecard-led redesign</div></div>
+    </div>
+    <div class="cta-wrap" style="margin: 2rem 0; align-items:center;">
+      <button class="cta-btn" onclick="document.getElementById('apply').scrollIntoView({behavior:'smooth'})">
+        Request My Free Scorecard
+        <span class="cta-btn-sub">100% Free · No card required · No obligation</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- SAMPLE SCORECARD -->
+<section class="sec sample-bg">
+  <div class="sec-inner">
+    <div class="sec-label">Sample scorecard</div>
+    <h2 style="text-align:left">See What You Get Before You Apply</h2>
+    <p style="text-align:left;color:var(--mid);font-size:1rem;max-width:520px;margin:0 0 0;line-height:1.72">A real scorecard from a real audit. Every category scored, every finding explained, every recommendation specific and actionable.</p>
+    <div class="sample-cols">
+      <div class="sample-img-col">
+        <div class="sample-img-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          <span>Upload your scorecard sample image here</span>
+        </div>
+      </div>
+      <div class="sample-form-col">
+        <h3>What's inside the scorecard</h3>
+        <p>Every category is scored and explained. Every finding has a specific recommendation attached. No vague advice. No generic checklists.</p>
+        <ul class="toc-list">
+          <li><span class="toc-num">01</span>Overall score out of 100</li>
+          <li><span class="toc-num">02</span>Nine category scores with explanations</li>
+          <li><span class="toc-num">03</span>Reddit voice-of-customer insights for your niche</li>
+          <li><span class="toc-num">04</span>Full CRO audit, page by page</li>
+          <li><span class="toc-num">05</span>Priority-ranked action list</li>
+          <li><span class="toc-num">06</span>Copy gaps and messaging opportunities</li>
+          <li><span class="toc-num">07</span>Competitive positioning review</li>
+          <li><span class="toc-num">08</span>Customer language analysis from Reddit</li>
+          <li><span class="toc-num">09</span>Conversion friction findings with fixes</li>
+        </ul>
+        <div class="gate-form-box">
+          <div id="gFormInner">
+            <h4>See a full sample scorecard</h4>
+            <p>Enter your name and email and we'll send it straight to your inbox.</p>
+            <input class="gi" type="text" id="gName" placeholder="Your name">
+            <input class="gi" type="email" id="gEmail" placeholder="Your email address">
+            <button class="gb" onclick="handleGate()">Send Me the Sample Scorecard</button>
+            <p class="g-note">No spam. Unsubscribe any time.</p>
+          </div>
+          <div class="gf-success" id="gDone">
+            <h4>On its way.</h4>
+            <p>Check your inbox. The sample scorecard is heading to you now.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO WE ARE -->
+<section class="sec">
+  <div class="sec-inner-narrow">
+    <div class="sec-label">Who we are</div>
+    <h2>Who Are We to Make Such Claims?</h2>
+    <div class="who-band-inner">
+      <p>We are LucidUplift. A consultancy specialised exclusively in four disciplines: <strong>Conversion Rate Optimisation, UX Research, UX Design, and Customer Intelligence.</strong> We work with one type of business only: service-based businesses.</p>
+      <p>That focus matters. Service businesses are completely different to e-commerce. The buying cycle is longer. The trust threshold is higher. The decision is more personal. Generic CRO advice wasn't built for that world. <mark>We were.</mark></p>
+    </div>
+    <div class="specialism-row">
+      <div class="spec-badge"><strong>Conversion Rate Optimisation</strong><span>Finding exactly why your site loses enquiries and what to fix first</span></div>
+      <div class="spec-badge"><strong>UX Research</strong><span>Understanding how your visitors actually think and behave on your site</span></div>
+      <div class="spec-badge"><strong>UX Design</strong><span>Designing intuitive, conversion-focused experiences that turn visitors into enquiries</span></div>
+      <div class="spec-badge"><strong>Customer Intelligence</strong><span>Mining thousands of real online conversations to find what your market actually wants</span></div>
+    </div>
+    <div class="who-stats">
+      <div class="ws"><div class="ws-num">48h</div><div class="ws-lbl">Average turnaround from application to scorecard in your inbox</div></div>
+      <div class="ws"><div class="ws-num">100%</div><div class="ws-lbl">Service business focused. We don't work with anyone else.</div></div>
+      <div class="ws"><div class="ws-num">£0</div><div class="ws-lbl">Cost of your scorecard. Completely free, no strings attached.</div></div>
+    </div>
+    <div class="auth-box">
+      <h3>Why service businesses specifically trust us:</h3>
+      <ul class="auth-list">
+        <li>We understand service business buying behaviour. Long decision cycles, trust-heavy purchases, high-value relationships. Most generalist agencies treat service businesses the same as e-commerce. We don't.</li>
+        <li>We synthesise thousands of Reddit comments in your specific niche. Not just a quick scan. A proper data synthesis that extracts the insights you won't find anywhere else.</li>
+        <li>Every score and recommendation is grounded in CRO principles. Not design preference, not trend-chasing, not gut feel. Evidence only.</li>
+        <li>We've worked across healthcare, automotive, home improvement, roofing, postal services, technology, machinery and industrial sectors. The nuances between niches matter and we know them inside out.</li>
+        <li>You get the scorecard before we ask for anything. If it's useful, we can talk. If not, you've lost nothing and gained a clear picture of exactly where your website needs work.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<div class="testi-sec" id="testimonials">
+  <div class="testi-inner">
+    <h2>What Service Businesses Say</h2>
+    <p class="testi-sub">Real results from real business owners who requested their free scorecard.</p>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="testi-qs">"</div>
+        <p class="testi-quote">Syed has a <strong>unique and exceptional ability to understand how design, functionality and a market intersect.</strong> I highly recommend him.</p>
+        <div class="testi-stars"><svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg><svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg><svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg><svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg><svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg></div>
+        <div class="testi-author"><div class="testi-name">Wes Wilkes</div><div class="testi-role">Founder at FINT</div></div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-qs">"</div>
+        <p class="testi-quote"><strong>Managed us well</strong> as we went through our rounds of feedback and iteration. <strong>Looking forward to working with him on the next stage!</strong></p>
+        <div class="testi-stars"><svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg><svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg><svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg><svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg><svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg></div>
+        <div class="testi-author"><div class="testi-name">Paul Naha-Biswas</div><div class="testi-role">CEO at Sixley</div></div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-qs">"</div>
+        <p class="testi-quote">Very thorough in all of his work and has very <strong>good attention to detail.</strong> Syed is a person that has a real passion in UX and <strong>really cares about the work</strong> he is delivering is the <strong>upmost best quality.</strong></p>
+        <div class="testi-stars"><svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg><svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg><svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg><svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg><svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg></div>
+        <div class="testi-author"><div class="testi-name">Anton Hilton</div><div class="testi-role">CEO at Reffle</div></div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-qs">"</div>
+        <p class="testi-quote"><strong>Forward thinking in his approach</strong> to our brief. As a client I was impressed with both his deliverables. I would happily work with Syed again, and <strong>would certainly recommend as an asset to any team.</strong></p>
+        <div class="testi-stars"><svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg><svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg><svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg><svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg><svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg></div>
+        <div class="testi-author"><div class="testi-name">Tim Silbermann</div><div class="testi-role">Co-Founder at RWRD</div></div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-qs">"</div>
+        <p class="testi-quote"><strong>Lovely to work with.</strong> During the design stage he processed information rapidly, <strong>produced designs with a critical view.</strong> Great person, very professional with <strong>limitless creativity.</strong></p>
+        <div class="testi-stars"><svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg><svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg><svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg><svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg><svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg></div>
+        <div class="testi-author"><div class="testi-name">Jarrod Ayling</div><div class="testi-role">CEO at People Bunch</div></div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-qs">"</div>
+        <p class="testi-quote">Has always <strong>delivered high-quality work.</strong> What really makes Syed stand out from others is his <strong>ability to listen and incorporate feedback</strong> which made the whole web-design process a very smooth and enjoyable experience.</p>
+        <div class="testi-stars"><svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg><svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg><svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg><svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg><svg viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg></div>
+        <div class="testi-author"><div class="testi-name">Lubos Vaci</div><div class="testi-role">CEO at Emootion Ltd</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- URGENCY -->
+<div class="urgency">
+  <div class="urgency-heading">Request Your Free Scorecard Before This Month's Spots Fill Up</div>
+  <p class="urgency-sub">We take on a limited number of scorecards each month to make sure every one gets the time and attention it deserves. When the spots are gone, they're gone until next month.</p>
+  <div class="spots-row">
+    <div class="spot-item"><span class="spot-num">7</span><span class="spot-lbl">Spots per month</span></div>
+    <div class="spot-item"><span class="spot-num">4</span><span class="spot-lbl">Already taken</span></div>
+    <div class="spot-item"><span class="spot-num">3</span><span class="spot-lbl">Remaining</span></div>
+  </div>
+</div>
+
+<!-- FINAL FORM -->
+<div class="final" id="apply">
+  <h2>Request Your Free Scorecard Now</h2>
+  <p class="fsub">Submit your details below. We'll review your site and if it's a good fit, your scorecard will be in your inbox within 48 hours.</p>
+  <div class="ff">
+    <form id="mainForm">
+      <div class="fg"><label class="fl" for="fn">Your name</label><input class="fi" type="text" id="fn" name="name" placeholder="e.g. Sarah Johnson" autocomplete="name" required></div>
+      <div class="fg"><label class="fl" for="fe">Email address</label><input class="fi" type="email" id="fe" name="email" placeholder="you@yourbusiness.com" autocomplete="email" required></div>
+      <div class="fg"><label class="fl" for="fphone">Phone number <span class="opt">(optional)</span></label><input class="fi" type="tel" id="fphone" name="tel" placeholder="e.g. 07700 900000" autocomplete="tel"></div>
+      <div class="fg"><label class="fl" for="furl">Your website URL</label><input class="fi" type="url" id="furl" name="url" placeholder="https://yourbusiness.com" autocomplete="url" required></div>
+      <div class="fg"><label class="fl" for="fcomp">Main competitor URL <span class="opt">(optional, for competitive analysis)</span></label><input class="fi" type="url" id="fcomp" name="competitor" placeholder="https://theirwebsite.com"></div>
+      <button type="submit" class="fs-btn">
+        Request My Free Scorecard
+        <span class="fs-btn-sub">100% Free · No card required · No obligation · Limited spots each month</span>
+      </button>
+    </form>
+    <div class="f-ok" id="fOk">
+      <div class="f-ok-icon">
+        <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="18" cy="18" r="18" fill="#1d6fe8"/>
+          <path d="M10 18.5l5.5 5.5 10.5-11" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h3>You're in. Request received!</h3>
+      <p class="f-ok-sub">We'll review your site and have your personalised scorecard in your inbox within 48 hours. Here's what happens next:</p>
+      <div class="f-ok-steps">
+        <div class="f-ok-step">
+          <div class="f-ok-step-dot">1</div>
+          <div class="f-ok-step-label">We review your site</div>
+        </div>
+        <div class="f-ok-step">
+          <div class="f-ok-step-dot">2</div>
+          <div class="f-ok-step-label">We run the research</div>
+        </div>
+        <div class="f-ok-step">
+          <div class="f-ok-step-dot">3</div>
+          <div class="f-ok-step-label">Scorecard in your inbox</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>© 2025 LucidUplift · Specialised in CRO, UX Research, UX Design and Customer Intelligence for Service Businesses</p>
+  <p style="max-width:500px;margin:0.5rem auto 0;opacity:0.75">Results shown are from real client projects and are not a guarantee of the same outcome. Every business and website is different. The scorecard provides research and recommendations. Results depend on implementation.</p>
+</footer>
+
+<script>
+// DONUT CHART
+const segments = [
+  { label: 'Homepage\nClarity',          score: 58, color: '#fbbf24' },
+  { label: 'CTA\nEffectiveness',         score: 41, color: '#f87171' },
+  { label: 'Trust\nSignals',            score: 63, color: '#fbbf24' },
+  { label: 'Customer\nLanguage',        score: 35, color: '#f87171' },
+  { label: 'Pricing\nTransparency',     score: 28, color: '#f87171' },
+  { label: 'Conversion\nFriction',      score: 72, color: '#fbbf24' },
+  { label: 'Competitive\nPositioning',  score: 78, color: '#34d399' },
+];
+const overall = Math.round(segments.reduce((s,x) => s+x.score, 0) / segments.length);
+const canvas  = document.getElementById('donutChart');
+const ctx     = canvas.getContext('2d');
+const SIZE = 320, cx = SIZE/2, cy = SIZE/2, outerR = 110, innerR = 67, gap = 0.04;
+let animated = false;
+
+function drawDonut(progress) {
+  ctx.clearRect(0, 0, SIZE, SIZE);
+  const step = (2 * Math.PI) / segments.length;
+  segments.forEach((seg, i) => {
+    const start = -Math.PI/2 + i*step + gap;
+    const end   = start + step*progress - gap;
+    if (end <= start) return;
+    ctx.beginPath();
+    ctx.arc(cx, cy, outerR, start, end);
+    ctx.arc(cx, cy, innerR, end, start, true);
+    ctx.closePath();
+    ctx.fillStyle = seg.color;
+    ctx.fill();
+    if (progress >= 0.99) {
+      const midAngle = -Math.PI/2 + i*step + step/2;
+      const labelR = outerR + 28;
+      const lx = cx + Math.cos(midAngle)*labelR;
+      const ly = cy + Math.sin(midAngle)*labelR;
+      ctx.save();
+      ctx.font = '700 9px "Montserrat", sans-serif';
+      ctx.fillStyle = '#444';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      const lines = seg.label.split('\n');
+      const lineH = 14;
+      const offsetY = lines.length === 2 ? -lineH/2 : 0;
+      lines.forEach((line, li) => ctx.fillText(line, lx, ly + offsetY + li*lineH));
+      ctx.restore();
+    }
+  });
+}
+
+function animateDonut() {
+  let start = null;
+  const dur = 1300;
+  const scoreEl = document.getElementById('animScore');
+  function frame(ts) {
+    if (!start) start = ts;
+    const p = Math.min((ts - start)/dur, 1);
+    const ease = 1 - Math.pow(1-p, 3);
+    drawDonut(ease);
+    scoreEl.textContent = Math.round(overall*ease) + '/100';
+    if (p < 1) requestAnimationFrame(frame);
+    else { drawDonut(1); scoreEl.textContent = overall + '/100'; }
+  }
+  requestAnimationFrame(frame);
+}
+
+const donutObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting && !animated) { animated = true; animateDonut(); donutObs.disconnect(); }
+  });
+}, { threshold: 0.35 });
+donutObs.observe(canvas);
+
+// GATE
+function handleGate() {
+  const n  = document.getElementById('gName').value.trim();
+  const em = document.getElementById('gEmail').value.trim();
+  if (!n || !em) return;
+  document.getElementById('gFormInner').style.display = 'none';
+  document.getElementById('gDone').style.display = 'block';
+}
+
+// MAIN FORM
+document.getElementById('mainForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  this.style.display = 'none';
+  document.getElementById('fOk').style.display = 'block';
+});
+</script>
+</body>
+</html>
