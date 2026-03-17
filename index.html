@@ -742,28 +742,21 @@ document.getElementById('mainForm').addEventListener('submit', function(e) {
   btn.textContent = 'Sending...';
   btn.disabled = true;
 
-  const data = {
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyQhlvNyDl1qrE9QUlQi7l7AO6CqpArpTQLm6NgrlxmBm8BKIhV3ff6TKogZZOBbK5_8g/exec';
+
+  const params = new URLSearchParams({
     name:       document.getElementById('fn').value.trim(),
     email:      document.getElementById('fe').value.trim(),
     phone:      document.getElementById('fphone').value.trim(),
     website:    document.getElementById('furl').value.trim(),
     competitor: document.getElementById('fcomp').value.trim()
-  };
+  });
 
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyQhlvNyDl1qrE9QUlQi7l7AO6CqpArpTQLm6NgrlxmBm8BKIhV3ff6TKogZZOBbK5_8g/exec';
-
-  fetch(SCRIPT_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
+  fetch(SCRIPT_URL + '?' + params.toString(), {
+    method: 'GET',
+    mode: 'no-cors'
   })
-  .then(() => {
-    document.getElementById('mainForm').style.display = 'none';
-    document.getElementById('fOk').style.display = 'block';
-  })
-  .catch(() => {
-    // Even on network error, show success — data likely went through (no-cors)
+  .finally(() => {
     document.getElementById('mainForm').style.display = 'none';
     document.getElementById('fOk').style.display = 'block';
   });
