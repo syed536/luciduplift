@@ -159,7 +159,7 @@ mark { background: rgba(255,241,118,0.85); padding: 0.05rem 0.3rem; border-radiu
 .auth-box h3 { font-family: 'Montserrat', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--black); margin-bottom: 1rem; }
 .auth-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.65rem; }
 .auth-list li { display: flex; align-items: flex-start; gap: 0.65rem; font-size: 1rem; color: var(--body); line-height: 1.7; }
-.auth-list li::before { content: '✓'; color: var(--blue); font-weight: 700; flex-shrink: 0; }
+.auth-list li::before { content: 'â'; color: var(--blue); font-weight: 700; flex-shrink: 0; }
 
 /* TESTIMONIALS */
 .testi-sec { padding: 4.5rem 112px; background: var(--grey); border-top: 1px solid var(--border); }
@@ -241,7 +241,7 @@ mark { background: rgba(255,241,118,0.85); padding: 0.05rem 0.3rem; border-radiu
 
 footer { text-align: center; padding: 1.75rem 112px; font-size: 0.82rem; color: var(--soft); border-top: 1px solid var(--border); line-height: 1.9; }
 
-/* ── RESPONSIVE ── */
+/* ââ RESPONSIVE ââ */
 @media (max-width: 1100px) {
   nav, .hero-outer, .testi-sec, .grey-band, .sec, .urgency, footer { padding-left: 2rem; padding-right: 2rem; }
 }
@@ -309,7 +309,7 @@ footer { text-align: center; padding: 1.75rem 112px; font-size: 0.82rem; color: 
     <div class="cta-wrap" style="align-items:flex-start;">
       <button class="cta-btn" onclick="document.getElementById('apply').scrollIntoView({behavior:'smooth'})">
         Request My Free Scorecard
-        <span class="cta-btn-sub">100% Free · No card required · No obligation</span>
+        <span class="cta-btn-sub">100% Free Â· No card required Â· No obligation</span>
       </button>
     </div>
   </div>
@@ -463,7 +463,7 @@ footer { text-align: center; padding: 1.75rem 112px; font-size: 0.82rem; color: 
     <div class="cta-wrap" style="margin: 2rem 0; align-items:center;">
       <button class="cta-btn" onclick="document.getElementById('apply').scrollIntoView({behavior:'smooth'})">
         Request My Free Scorecard
-        <span class="cta-btn-sub">100% Free · No card required · No obligation</span>
+        <span class="cta-btn-sub">100% Free Â· No card required Â· No obligation</span>
       </button>
     </div>
   </div>
@@ -477,10 +477,7 @@ footer { text-align: center; padding: 1.75rem 112px; font-size: 0.82rem; color: 
     <p style="text-align:left;color:var(--mid);font-size:1rem;max-width:520px;margin:0 0 0;line-height:1.72">A real scorecard from a real audit. Every category scored, every finding explained, every recommendation specific and actionable.</p>
     <div class="sample-cols">
       <div class="sample-img-col">
-        <div class="sample-img-placeholder">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-          <span>Upload your scorecard sample image here</span>
-        </div>
+        <img src="./scorecard-sample.jpg" alt="LucidUplift Scorecard Sample" style="width:100%;border-radius:4px;display:block;box-shadow:0 4px 24px rgba(0,0,0,0.10);" />
       </div>
       <div class="sample-form-col">
         <h3>What's inside the scorecard</h3>
@@ -533,7 +530,7 @@ footer { text-align: center; padding: 1.75rem 112px; font-size: 0.82rem; color: 
     <div class="who-stats">
       <div class="ws"><div class="ws-num">48h</div><div class="ws-lbl">Average turnaround from application to scorecard in your inbox</div></div>
       <div class="ws"><div class="ws-num">100%</div><div class="ws-lbl">Service business focused. We don't work with anyone else.</div></div>
-      <div class="ws"><div class="ws-num">£0</div><div class="ws-lbl">Cost of your scorecard. Completely free, no strings attached.</div></div>
+      <div class="ws"><div class="ws-num">Â£0</div><div class="ws-lbl">Cost of your scorecard. Completely free, no strings attached.</div></div>
     </div>
     <div class="auth-box">
       <h3>Why service businesses specifically trust us:</h3>
@@ -618,7 +615,7 @@ footer { text-align: center; padding: 1.75rem 112px; font-size: 0.82rem; color: 
       <div class="fg"><label class="fl" for="fcomp">Main competitor URL <span class="opt">(optional, for competitive analysis)</span></label><input class="fi" type="url" id="fcomp" name="competitor" placeholder="https://theirwebsite.com"></div>
       <button type="submit" class="fs-btn">
         Request My Free Scorecard
-        <span class="fs-btn-sub">100% Free · No card required · No obligation · Limited spots each month</span>
+        <span class="fs-btn-sub">100% Free Â· No card required Â· No obligation Â· Limited spots each month</span>
       </button>
     </form>
     <div class="f-ok" id="fOk">
@@ -649,7 +646,7 @@ footer { text-align: center; padding: 1.75rem 112px; font-size: 0.82rem; color: 
 </div>
 
 <footer>
-  <p>© 2025 LucidUplift · Specialised in CRO, UX Research, UX Design and Customer Intelligence for Service Businesses</p>
+  <p>Â© 2025 LucidUplift Â· Specialised in CRO, UX Research, UX Design and Customer Intelligence for Service Businesses</p>
   <p style="max-width:500px;margin:0.5rem auto 0;opacity:0.75">Results shown are from real client projects and are not a guarantee of the same outcome. Every business and website is different. The scorecard provides research and recommendations. Results depend on implementation.</p>
 </footer>
 
@@ -734,7 +731,7 @@ function handleGate() {
   document.getElementById('gDone').style.display = 'block';
 }
 
-// MAIN FORM — sends to Google Sheets
+// MAIN FORM â sends to Google Sheets
 document.getElementById('mainForm').addEventListener('submit', function(e) {
   e.preventDefault();
 
